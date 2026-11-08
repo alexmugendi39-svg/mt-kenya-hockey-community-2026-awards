@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mt Kenya Hockey - Best Team 2026 Vote</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>body{font-family:'Inter',sans-serif;background:#0A0F0A}.font-black2{font-family:'Archivo Black',sans-serif}.card{background:#141A14;border:1px solid #2A332A;border-radius:16px}</style>
+</head>
+<body class="text-white">
+<nav class="flex justify-between items-center px-4 py-4 bg-black border-b border-green-900 sticky top-0 z-50">
+<div class="flex items-center gap-3"><div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center font-black2 text-black">M</div><div><p class="font-black2">MT KENYA HOCKEY</p><p class="text-green-400 text-xs tracking-widest">BEST TEAM 2026 AWARDS</p></div></div>
+<span class="bg-green-500 text-black px-3 py-1 rounded-full font-bold text-xs" id="totalVotes">0 Votes</span>
+</nav>
+
+<section class="text-center px-4 py-10">
+<p class="text-green-400 font-bold">🏑 JANUARY - NOVEMBER 2026 • ALL TOURNAMENTS</p>
+<h1 class="font-black2 text-4xl md:text-5xl mt-3">WHO IS THE<br><span class="text-green-400">BEST TEAM 2026?</span></h1>
+<p class="text-gray-300 mt-3 max-w-xl mx-auto">Vote once for your team according to performance in 2026. Performance (National / Regional / East Africa) + Your Vote = Winner.</p>
+</section>
+
+<div class="max-w-4xl mx-auto px-4 pb-10">
+<h2 class="font-black2 text-xl mb-4">📅 2026 Tournaments - Who Won?</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+<div class="card p-3"><p class="text-gray-400 text-xs">Meru Opens</p><p class="font-bold text-green-400">🏆 Cold War</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">CEHOTA Tournament</p><p class="font-bold text-green-400">🏆 Cold War</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">Mashariki Festival</p><p class="font-bold text-green-400">🏆 Cold War</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">Meru Hockey League</p><p class="font-bold text-green-400">🏆 WAFARISAYO</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">KUSA Events</p><p class="font-bold">Trojans / Bokora</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">KTCSA - National</p><p class="font-bold">Blinders / Meru TTC</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">KMTC Category</p><p class="font-bold">KMTC Meru</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">TVET Games</p><p class="font-bold">Titans</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">Kenya Hockey League</p><p class="font-bold">Trojans / Kirinyaga Uni A</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">University Category</p><p class="font-bold">Tharaka University</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">Mt Kenya League</p><p class="font-bold">Clippers / Hurricanes</p></div>
+<div class="card p-3"><p class="text-gray-400 text-xs">Kimathi Tournament</p><p class="font-bold">Mt Kenya Teams</p></div>
+</div>
+
+<h2 class="font-black2 text-xl mt-10 mb-4">🏆 Live Leaderboard</h2>
+<div id="leaderboard" class="space-y-3"><p class="text-gray-400">Loading votes...</p></div>
+
+<h2 class="font-black2 text-xl mt-10 mb-4">🗳️ Vote Once For Your Team</h2>
+<div id="teamsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+<p class="text-xs text-gray-500 text-center mt-6">1 Vote Per Person • Mt Kenya Hockey League 2026 • Kaaga Grounds</p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDFXHhxW9oWLAzvmacJfIowQfCuhkInSW4",
+  authDomain: "mt-kenya-hockey.firebaseapp.com",
+  projectId: "mt-kenya-hockey",
+  storageBucket: "mt-kenya-hockey.firebasestorage.app",
+  messagingSenderId: "237075305527",
+  appId: "1:237075305527:web:a48af28dbe3c4f08675bb2",
+  measurementId: "G-5EML745REG"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const TEAMS = [
+  {name:"Cold War", info:"Meru Opens • CEHOTA • Mashariki - Winners"},
+  {name:"WAFARISAYO", info:"Meru Hockey League - Leading"},
+  {name:"Trojans", info:"KUSA • Kenya Hockey League"},
+  {name:"Blinders", info:"KTCSA National Level"},
+  {name:"Titans", info:"TVET Games Winners"},
+  {name:"Bokora", info:"KUSA Events"},
+  {name:"Kirinyaga Uni A", info:"Kenya Hockey League"},
+  {name:"Meru TTC", info:"KTCSA - Teachers Colleges"},
+  {name:"KMTC Meru", info:"KMTC Category - Separate Category"},
+  {name:"Tharaka University", info:"University Category"},
+  {name:"Clippers", info:"Mt Kenya League"},
+  {name:"Hurricanes", info:"Mt Kenya League"}
+];
+const TEAM_NAMES = TEAMS.map(t=>t.name);
+window.vote = async (team) => {
+  const name = prompt("Andika jina lako:");
+  if(!name) return alert("Weka jina kwanza!");
+  if(localStorage.getItem("voted_2026")) return alert("Ulishapiga kura! Kura moja tu. Asante!");
+  await addDoc(collection(db, "votes2026"), { team, voter: name, time: Date.now() });
+  localStorage.setItem("voted_2026", team);
+  alert("✅ Asante " + name + "! Umepigia " + team + " kura!");
+};
+onSnapshot(query(collection(db, "votes2026")), (snap) => {
+  const votes = snap.docs.map(d => d.data());
+  document.getElementById("totalVotes").textContent = votes.length + " Votes";
+  let counts = {}; TEAM_NAMES.forEach(t => counts[t]=0);
+  votes.forEach(v => { if(counts[v.team]!==undefined) counts[v.team]++; });
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const max = Math.max(1, ...sorted.map(s=>s[1]));
+  document.getElementById("leaderboard").innerHTML = sorted.map(([team, c], i) => `
+    <div class="card p-4"><div class="flex justify-between font-bold"><span>${i===0?'👑 ':''}${i+1}. ${team}</span><span class="text-green-400">${c} votes • ${votes.length?Math.round(c/votes.length*100):0}%</span></div>
+    <div class="bg-white/10 h-3 rounded-full mt-2 overflow-hidden"><div class="bg-green-500 h-full" style="width:${c/max*100}%"></div></div></div>`).join('');
+  document.getElementById("teamsGrid").innerHTML = TEAMS.map(t => `
+    <div class="card p-4 flex justify-between items-center">
+      <div class="flex items-center gap-3"><div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center font-black2 text-black text-xl">${t.name[0]}</div><div><p class="font-bold">${t.name}</p><p class="text-xs text-gray-400">${t.info} • ${counts[t.name]} votes</p></div></div>
+      <button onclick="vote('${t.name}')" class="bg-green-500 text-black px-5 py-2 rounded-full font-bold">Vote →</button>
+    </div>`).join('');
+});
+</script>
+</body>
+</html>
