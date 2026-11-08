@@ -17,7 +17,7 @@
 <section class="text-center py-8 px-4">
 <p class="text-green-400 font-bold text-xs tracking-widest">🏑 VOTE NOW • CLOSES DEC 2026</p>
 <h1 class="font-black2 text-4xl md:text-5xl mt-2">BEST TEAM <span class="text-green-500">2026</span></h1>
-<p class="text-gray-400 text-sm mt-2">Chagua timu yako bora ya Mt Kenya Hockey. Kura moja tu!</p>
+<p class="text-gray-400 text-sm mt-2">Chagua timu yako bora ya Mt Kenya Hockey. Kura moja tu! • 12 Teams</p>
 <a href="index.html" class="inline-block mt-4 bg-white text-black px-4 py-2 rounded-full font-bold text-sm">← Back Home</a>
 </section>
 
@@ -34,22 +34,23 @@
 
 <script>
 const TEAMS = [
-  { name:"VETERANS HC", info:"Mt Kenya League - Veterans", color:"bg-blue-500", text:"text-blue-500", border:"border-blue-500" },
-  { name:"Hurricanes", info:"Mt Kenya League" },
-  { name:"Meru Hockey Club", info:"Mt Kenya League" },
-  { name:"Nanyuki Hockey Club", info:"Mt Kenya League" },
-  { name:"Isiolo Hockey Club", info:"Mt Kenya League" },
-  { name:"Embu Hockey Club", info:"Mt Kenya League" },
-  { name:"Chuka Hockey Club", info:"Mt Kenya League" },
-  { name:"Nyeri Hockey Club", info:"Mt Kenya League" },
-  { name:"Karatina Hockey Club", info:"Mt Kenya League" },
+  { name:"Blinders", info:"Mt Kenya Hockey League" },
+  { name:"Titans", info:"Mt Kenya Hockey League" },
+  { name:"Trojans", info:"Mt Kenya Hockey League" },
+  { name:"Bakora", info:"Mt Kenya Hockey League" },
+  { name:"Kirinyaga University A", info:"KUSA / Mt Kenya League" },
+  { name:"KMTC Meru", info:"Mt Kenya Hockey League" },
+  { name:"Clippers", info:"Mt Kenya Hockey League" },
+  { name:"Tharaka University", info:"Mt Kenya Hockey League" },
+  { name:"WAFARISAYO", info:"Mt Kenya Hockey League" },
+  { name:"Veterans", info:"Mt Kenya League - Veterans", color:"bg-blue-500", text:"text-blue-500" },
+  { name:"Jambazi", info:"Mt Kenya Hockey League" },
+  { name:"Cold War", info:"Mt Kenya Hockey League" },
 ];
 
 let votes = JSON.parse(localStorage.getItem('mtkenya_votes_2026') || '{}');
 let hasVoted = localStorage.getItem('mtkenya_has_voted_2026');
-
 function total(){ return Object.values(votes).reduce((a,b)=>a+b,0); }
-
 function render(){
   document.getElementById('totalVotes').textContent = total() + ' Votes';
   const wrap = document.getElementById('teams');
@@ -57,16 +58,15 @@ function render(){
   TEAMS.forEach(t=>{
     const v = votes[t.name] || 0;
     const pct = total() ? Math.round((v/total())*100) : 0;
-    const isVet = t.name === "VETERANS HC";
+    const isVet = t.name === "Veterans";
     const badgeColor = t.color || 'bg-green-500';
     const accent = t.text || 'text-green-500';
-    const border = isVet ? 'border-blue-500' : '';
     wrap.innerHTML += `
-    <div class="card bg-[#111] rounded-2xl p-5 ${border}">
+    <div class="card bg-[#111] rounded-2xl p-5 ${isVet ? 'border-blue-500' : ''}">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 ${badgeColor} rounded-full flex items-center justify-center font-black text-black text-xl shrink-0">${t.name[0]}</div>
         <div class="flex-1 min-w-0">
-          <h3 class="font-black2 text-base leading-tight truncate">${t.name} ${isVet ? '💙' : ''}</h3>
+          <h3 class="font-black2 text-base leading-tight">${t.name} ${isVet ? '💙' : ''}</h3>
           <p class="text-xs text-gray-400">${t.info}</p>
         </div>
         <span class="font-black2 text-xl ${accent}">${v}</span>
@@ -77,7 +77,6 @@ function render(){
     </div>`;
   });
 }
-
 function vote(name){
   if(hasVoted){ alert('Ulisha vote!'); return; }
   votes[name] = (votes[name] || 0) + 1;
